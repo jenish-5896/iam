@@ -8,7 +8,7 @@ spec:
   selector:
     app: hotel-admin
   ports:
-    - protocol: http
+    - protocol: TCP 
       port: 80
       targetPort: 80
       nodePort: 30056
