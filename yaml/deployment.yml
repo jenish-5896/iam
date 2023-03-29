@@ -15,31 +15,33 @@ spec:
       labels:
         app: hotel-admin
     spec:
+      imagePullSecrets:
+        - name: dockerhubregistry
       containers:
       - name: hotel-admin
         image: jennish/admin:36
         ports:
         - containerPort: 80
-        volumeMounts:
-        - mountPath: /var/www/html/.env
-          name: admin-vol1
-          subPath: .env
-        - mountPath: /etc/apache2/sites-enabled/000-default.conf
-          name: admin-vol2
-          subPath: 000-default.conf
-        - mountPath: /var/www/html/storage/logs
-          name: pvc  
+      #  volumeMounts:
+      #  - mountPath: /var/www/html/.env
+      #    name: admin-vol1
+      #    subPath: .env
+      #  - mountPath: /etc/apache2/sites-enabled/000-default.conf
+      #    name: admin-vol2
+      #    subPath: 000-default.conf
+      #  - mountPath: /var/www/html/storage/logs
+      #    name: pvc  
 
-      volumes:
-      - configMap:
-          name: config-admin-hotel
-        name: admin-vol1
-      - configMap:
-          name: config-apacheconf-hotel
-        name: admin-vol2
-      - name: pvc
-        persistentVolumeClaim:
-          claimName: pvc-hotel  
+      #volumes:
+      #- configMap:
+      #    name: config-admin-hotel
+      #  name: admin-vol1
+      #- configMap:
+      #    name: config-apacheconf-hotel
+       # name: admin-vol2
+      #- name: pvc
+       # persistentVolumeClaim:
+       #   claimName: pvc-hotel  
 
       dnsConfig: {}
       dnsPolicy: ClusterFirst
