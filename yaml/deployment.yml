@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hotel-admin
+  namespace: hotel
+  labels:
+    app: hotel-admin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hotel-admin
+  template:
+    metadata:
+      labels:
+        app: hotel-admin
+    spec:
+      containers:
+      - name: hotel-admin
+        image: jennish/admin:36
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - mountPath: /var/www/html/.env
+          name: admin-vol1
+          subPath: .env
+        - mountPath: /etc/apache2/sites-enabled/000-default.conf
+          name: admin-vol2
+          subPath: 000-default.conf
+        - mountPath: /var/www/html/storage/logs
+          name: pvc  
+
+      volumes:
+      - configMap:
+          name: config-admin-hotel
+        name: admin-vol1
+      - configMap:
+          name: config-apacheconf-hotel
+        name: admin-vol2
+      - name: pvc
+        persistentVolumeClaim:
+          claimName: pvc-hotel  
+
+      dnsConfig: {}
+      dnsPolicy: ClusterFirst
+      enableServiceLinks: true
+      hostAliases:
+      - hostnames:
+        - dev-cdn.com
+        ip: 1.2.3.4
+      - hostnames:
+        - dev-presigned.com
+        ip: 1.2.3.4
